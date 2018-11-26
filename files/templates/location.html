@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+  <thead>
+        <tr>
+          <th scope="col">Location</th>
+          <th scope="col">Overall Ranking</th>
+          <th scope="col">Best Times to Go</th>
+          <th scope="col">Noise Level</th>
+          <th scope="col">Crowdedness</th>
+          <th scope="col">Atmosphere</th>
+          <th scope="col">Best Activities</th>
+          <th scope="col">Link to Map</th>
+          <th scope="col">Comments</th>
+        </tr>
+  </thead>
+  <tbody>
+    {% for item in location %}
+        <tr>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>
+            <td>{{ item[3] }}</td>
+            <td>{{ item[4] }}</td>
+            <td>{{ item[5] }}</td>
+            <td>{{ item[6] }}</td>
+            <td>{{ item[7] }}</td>
+            <td>{{ item[8] }}</td>
+            <td>{{ item[9] }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
