@@ -22,12 +22,12 @@
 
         document.querySelector('form').onsubmit=function(event){
             event.preventDefault()
-            $.get('/check', {username: document.querySelector('input[name=username]').value}, function(data){
+            $.get('/checkname', {username: document.querySelector('input[name=username]').value}, function(data){
                 if (data) {
                     document.querySelector('#form').submit();
                 }
                 else {
-                    alert("username is already taken");
+                    alert("Username is already taken");
                 }
             });
         };

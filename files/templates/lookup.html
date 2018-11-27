@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+   <form action="/home" method="post">
+        <div class="form-group">
+            <select class="form-control" name="places" required>
+                <option disabled selected value="">Locations</option>
+                    {% for item in places %}
+                        <option value="{{item['name']}}">{{ item['name']}}</option>
+                    {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Look up</button>
+    </form>
+{% endblock %}

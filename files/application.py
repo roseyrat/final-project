@@ -36,18 +36,29 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///spaces.db")
 
-
+# Does not work completely because the home button does not work. Clicking the red title gets you there
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def home():
-    """ Displays main page """
+    """ Displays locations user rated or added """
     if request.method == "GET":
-        places = db.execute("SELECT name FROM locations")
+        places = db.execute("SELECT name FROM locations WHERE id = :id", id=session["user_id"])
         return render_template("home.html", places=places)
     else:
-        return redirect("/location")
+        return redirect("/")
 
+# Does not work completely because the template it renders does not work
+@app.route("/lookup", methods=["GET", "POST"])
+@login_required
+def lookup():
+    """ Allows user to look up locations """
+    if request.method == "GET":
+        places = db.execute("SELECT name FROM locations")
+        return render_template("lookup.html", places=places)
+    else:
+        return redirect("location.html")
 
+# This page should be taken down and new one put up when the averages are caluclated
 @app.route("/")
 @login_required
 def location():
@@ -57,19 +68,38 @@ def location():
     return render_template("location.html", row=location)
 
 
-# I am still working on this. It doesnt have all the catigories and wont insert into the table
 @app.route("/add", methods=["GET", "POST"])
 @login_required
 def add():
+    """ Referenced https://stackoverflow.com/questions/4108341/generating-an-ascending-list-of-numbers-of-arbitrary-length-in-python """
     """ Allows user to add a location """
     if request.method == "POST":
-        result = db.execute("INSERT INTO locations (name, comments, noise) VALUES(:name, :comments, :noise)",
-                            name=request.form.get("location"), comments=request.form.get("comments"), noise=request.form.get("noise"))
+        result = db.execute("INSERT INTO locations (name, comments, noise, rating, atmosphere, crowdedness, activity, time, maps, id) VALUES(:name, :comments, :noise, :rating, :atmosphere, :crowdedness, :activity, :time, :maps, :id)",
+                            name=request.form.get("location"), comments=request.form.get("comments"), noise=request.form.get("noise"), rating=request.form.get("rating"), atmosphere=request.form.get("atmosphere"), crowdedness=request.form.get("crowdedness"), activity=request.form.get("activity"), time=request.form.get("time"), maps=request.form.get("map"),id=session["user_id"])
         if not result:
             return apology("could not insert into table")
+        return redirect("/")
     else:
-        return render_template("add.html")
+        activities = ["studying alone", "studying with friends", "hanging out", "reading", "playing games", "sleeping"]
+        times = list(range(1, 24))
+        return render_template("add.html", activities=activities, times=times)
 
+
+@app.route("/rate", methods=["GET", "POST"])
+@login_required
+def rate():
+    """ Allows user to rate a location """
+    if request.method == "POST":
+        result = db.execute("INSERT INTO locations (name, comments, noise, rating, atmosphere, crowdedness, activity, time, maps, id) VALUES(:name, :comments, :noise, :rating, :atmosphere, :crowdedness, :activity, :time, :maps, :id)",
+                            name=request.form.get("location"), comments=request.form.get("comments"), noise=request.form.get("noise"), rating=request.form.get("rating"), atmosphere=request.form.get("atmosphere"), crowdedness=request.form.get("crowdedness"), activity=request.form.get("activity"), time=request.form.get("time"), maps=request.form.get("map"), id=session["user_id"])
+        if not result:
+            return apology("could not insert into table")
+        return redirect("/")
+    else:
+        activities = ["studying alone", "studying with friends", "hanging out", "reading", "playing games", "sleeping"]
+        times = list(range(1, 24))
+        places = db.execute("SELECT name FROM locations")
+        return render_template("rate.html", activities=activities, times=times, places=places)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -146,8 +176,8 @@ def register():
         return redirect("/login")
 
 
-@app.route("/check", methods=["GET"])
-def check():
+@app.route("/checkname", methods=["GET"])
+def checkname():
     """ Referenced https://stackoverflow.com/questions/19435906/what-is-the-correct-way-to-format-true-in-json """
     """ Return true if username available, else false, in JSON format"""
     username = request.args.get("username")
@@ -157,6 +187,17 @@ def check():
         return jsonify(False)
     return jsonify(True)
 
+
+@app.route("/checkloc", methods=["GET"])
+def checkloc():
+    """ Referenced https://stackoverflow.com/questions/19435906/what-is-the-correct-way-to-format-true-in-json """
+    """ Return true if location is not already in the database, else false, in JSON format"""
+    location = request.args.get("location")
+    location = location.lower()
+    rows = db.execute("SELECT name FROM location WHERE location = :location", location=location)
+    if len(rows) != 0 or len(location) < 0:
+        return jsonify(False)
+    return jsonify(True)
 
 def errorhandler(e):
     """Handle error"""

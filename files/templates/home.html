@@ -5,15 +5,12 @@
 {% endblock %}
 
 {% block main %}
-   <form action="/home" method="post">
-        <div class="form-group">
-            <select class="form-control" name="places" required>
-                <option disabled selected value="">Locations</option>
-                    {% for item in places %}
-                        <option value="{{item['places']}}">{{ item['places']}}</option>
-                    {% endfor %}
-            </select>
-        </div>
-        <button class="btn btn-primary" type="submit">Look up</button>
-    </form>
+     <p>Locations You Have Added and Rated</p>
+     <div>
+         <body>
+            {% for item in places %}
+                {{item['places']}}
+            {% endfor %}
+         </body>
+    </div>
 {% endblock %}

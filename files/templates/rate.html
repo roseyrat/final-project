@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+   <form action="/home" method="post">
+        <div class="form-group">
+            <select class="form-control" name="places" required>
+                <option disabled selected value="">Locations</option>
+                    {% for item in places %}
+                        <option value="{{item['name']}}">{{ item['name']}}</option>
+                    {% endfor %}
+            </select>
+        </div>
+        <!-- Referenced https://www.reddit.com/r/flask/comments/5q6aiy/how_to_join_multiple_child_templates_to_create/ -->
+         {% include 'catigories.html' %}
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+{% endblock %}

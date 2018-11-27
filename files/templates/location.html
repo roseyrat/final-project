@@ -4,13 +4,15 @@
     Log In
 {% endblock %}
 
+<!-- This page should be disacrded -->
+
 {% block main %}
 <table class="table table-striped">
   <thead>
         <tr>
           <th scope="col">Location</th>
           <th scope="col">Overall Ranking</th>
-          <th scope="col">Best Times to Go</th>
+          <th scope="col">Best Time to Go</th>
           <th scope="col">Noise Level</th>
           <th scope="col">Crowdedness</th>
           <th scope="col">Atmosphere</th>
@@ -22,16 +24,15 @@
   <tbody>
     {% for item in location %}
         <tr>
-            <td>{{ item[0] }}</td>
-            <td>{{ item[1] }}</td>
-            <td>{{ item[2] }}</td>
-            <td>{{ item[3] }}</td>
-            <td>{{ item[4] }}</td>
-            <td>{{ item[5] }}</td>
-            <td>{{ item[6] }}</td>
-            <td>{{ item[7] }}</td>
-            <td>{{ item[8] }}</td>
-            <td>{{ item[9] }}</td>
+            <td>{{ item['name']}}}}</td>
+            <td>{{ item['score'] }}</td>
+            <td>{{ item['time'] }}</td>
+            <td>{{ item['noise'] }}</td>
+            <td>{{ item['crowdedness'] }}</td>
+            <td>{{ item['atmosphere'] }}</td>
+            <td>{{ item['activity'] }}</td>
+            <td>{{ item['map'] }}</td>
+            <td>{{ item[comments'] }}</td>
         </tr>
     {% endfor %}
   </tbody>
